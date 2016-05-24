@@ -19,17 +19,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.rubygems_version = '1.8.23'
 
-  s.files = `git ls-files`.split($RS).reject do |file|
-    file =~ %r{^(?:
-    spec/.*
-    |Gemfile
-    |Rakefile
-    |\.rspec
-    |\.gitignore
-    |\.rubocop.yml
-    |\.travis.yml
-    )$}x
-  end
+  s.files = ["lib/pronto/phpcs/version.rb", "lib/pronto/phpcs.rb"]
   s.test_files = []
   s.extra_rdoc_files = ['LICENSE', 'README.md']
   s.require_paths = ['lib']

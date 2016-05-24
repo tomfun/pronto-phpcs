@@ -1,5 +1,11 @@
 # Pronto runner for Phpcs
 ## Prerequisites
+require 
+ - php
+ - phpcs
+ - and standard (Symfony 2 by default)
 ## Configuration
-
-~~Configuring Phpcs via .eslintrc will work just fine with pronto-eslint.~~
+ You may want set **PHPCS_STANDARD** env variable, or *PATH*, full example:
+```
+env PHPCS_STANDARD=Zend PATH=$PATH:~/.composer/vendor/bin/ ~/.gem/ruby/2.2.0/bin/pronto run --commit=194080e5537bc6cb0fdf24378b784e439c90f090
+```

@@ -7,28 +7,21 @@ module Pronto
       return [] unless @patches
 
       @patches.select { |patch| patch.additions > 0 }
-        .select { |patch| js_file?(patch.new_file_full_path) }
+        .select { |patch| php_file?(patch.new_file_full_path) }
         .map { |patch| inspect(patch) }
         .flatten.compact
     end
 
     def inspect(patch)
-      options = File.exist?('.eslintrc') ? :eslintrc : :defaults
-      # offences = Eslintrb.lint(patch.new_file_full_path, options).compact
+      options = ENV["PHPCS_STANDARD"] ? ENV["PHPCS_STANDARD"] : "Symfony2"
 
-      #./node_modules/.bin/eslint app.js -f json
-       # puts offences.first().ruleId
-      # puts ENV["doctor"]
-      # /home/tomfun/prj/trim-backend/node_modules/.bin/
-      eslint_out = `eslint #{patch.new_file_full_path} -f json`
-      eslint_out = JSON.parse(eslint_out)
-      eslint_out = eslint_out.first()["messages"]
-      # puts patch.new_file_full_path
-      #puts patch
-      # puts eslintOut
-      # puts offences
+      phpcs_out = `phpcs #{patch.new_file_full_path} --standard="#{options}" --report=json`
+      phpcs_out = JSON.parse(phpcs_out)
+      phpcs_out = phpcs_out["files"]
+      phpcs_out = phpcs_out["#{patch.new_file_full_path}"]
+      phpcs_out = phpcs_out["messages"]
 
-      eslint_out.map do |offence|
+      phpcs_out.map do |offence|
         patch.added_lines.select { |line| line.new_lineno == offence['line'] }
           .map { |line| new_message(offence, line) }
       end
@@ -41,8 +34,8 @@ module Pronto
       Message.new(path, line, level, offence['message'], nil, self.class)
     end
 
-    def js_file?(path)
-      %w(.js .es6).include? File.extname(path)
+    def php_file?(path)
+      %w(.php .phar).include? File.extname(path)
     end
   end
 end
