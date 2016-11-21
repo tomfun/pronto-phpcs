@@ -4,6 +4,7 @@ require
  - php
  - phpcs
  - and standard (Symfony 2 by default)
+
 ## Configuration
  You may want set **PHPCS_STANDARD** env variable, or *PATH*, full example:
 ```
